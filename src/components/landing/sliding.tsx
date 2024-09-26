@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence} from "framer-motion";
 import one_one from "@/assets/Images/01-01.jpg";
 import one_two from "@/assets/Images/02-01.jpg";
 import one_three from "@/assets/Images/03-01.jpg";
