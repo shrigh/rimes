@@ -6,27 +6,32 @@ import one_one from "@/assets/Images/01-01.jpg";
 import one_two from "@/assets/Images/02-01.jpg";
 import one_three from "@/assets/Images/03-01.jpg";
 import Image from "next/image";
+import { Fade } from "react-awesome-reveal";
 
 const SolutionCard = ({ image, text }: { image: string; text: string }) => (
-  <Card className="flex overflow-hidden h-44 rounded-lg shadow-md">
-    <Image
-      src={image}
-      alt="Solution"
-      height={50}
-      width={50}
-      className="w-1/3 object-cover"
-    />
-    <div className="w-2/3 flex flex-col p-4">
-      <CardContent className="flex-grow">
-        <p className="text-sm text-gray-600">{text}</p>
-      </CardContent>
-      <CardFooter className="p-0 mt-2">
-        <Button variant="link" className="p-0 text-teal-600 font-semibold">
-          Learn More <span className="ml-1">→</span>
-        </Button>
-      </CardFooter>
-    </div>
-  </Card>
+  <Fade delay={200}>
+    <Card className="flex overflow-hidden h-44 rounded-lg shadow-md">
+      <div className="h-full w-1/3">
+        <Image
+          src={image}
+          alt="Solution"
+          height={176}
+          width={176}
+          className="object-cover h-full w-full"
+        />
+      </div>
+      <div className="w-2/3 flex flex-col p-4">
+        <CardContent className="flex-grow">
+          <p className="text-sm text-gray-600">{text}</p>
+        </CardContent>
+        <CardFooter className="p-0 mt-2">
+          <Button variant="link" className="p-0 text-teal-600 font-semibold">
+            Learn More <span className="ml-1">→</span>
+          </Button>
+        </CardFooter>
+      </div>
+    </Card>
+  </Fade>
 );
 
 const TabbedSolutions = () => {

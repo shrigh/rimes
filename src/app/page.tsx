@@ -17,7 +17,7 @@ import Testimonials from "@/components/landing/testimonials";
 const RimesLandingPage: React.FC = () => {
   return (
     <motion.div
-      className="snap-y snap-mandatory overflow-y-scroll"
+      className="snap-y snap-mandatory"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
