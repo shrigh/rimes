@@ -57,7 +57,7 @@ const RimesFooter: React.FC = () => {
 
   // Define these constants at the component level
   // Define these constants at the component level
-  const ballRadius = 2; // Half of the ball's height (4px)
+  // const ballRadius = 2; // Half of the ball's height (4px)
   const bounceTop = 0; // Top of the logo
   const bounceBottom = -30; // Bounce height
   const xOffset = -40; // Leftward shift
