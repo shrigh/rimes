@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 interface Testimonial {
   content: string;
@@ -35,6 +35,8 @@ const TestimonialCarousel: React.FC<{ testimonials: Testimonial[] }> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { amount: 0.4 });
 
   const nextTestimonial = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
@@ -51,10 +53,16 @@ const TestimonialCarousel: React.FC<{ testimonials: Testimonial[] }> = ({
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto">
-      <h2 className="text-3xl font-bold mb-6 text-center text-[#143A33]">
+    <div ref={ref} className="w-full max-w-screen-lg mx-auto">
+      <motion.h2
+        className="text-3xl font-bold mb-6 text-center text-[#143A33]"
+        initial={{ opacity: 0, y: -20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+        transition={{ duration: 0.5 }}
+      >
         H2 Testimonial Carousel w/Image or Video
-      </h2>
+      </motion.h2>
+
       <Card className="p-6 md:p-10">
         <div className="h-[300px] md:h-[350px] overflow-hidden">
           {" "}
@@ -94,20 +102,29 @@ const TestimonialCarousel: React.FC<{ testimonials: Testimonial[] }> = ({
                     </p>
                   </div>
                 </div>
-                <div className="relative w-full md:w-1/2 ">
-                  <Image
-                    width={100}
-                    height={100}
-                    src={currentTestimonial.image}
-                    alt={`Testimonial from ${currentTestimonial.author}`}
-                    className="rounded-lg object-cover w-full h-full"
-                  />
-                  <Button
-                    size="icon"
-                    className="absolute inset-0 m-auto bg-white/80 hover:bg-white/90"
+                <div className="relative w-full md:w-1/2">
+                  <motion.div
+                    className="bg-white rounded-lg shadow-md overflow-hidden"
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 1 * 0.2 }}
                   >
-                    <Play className="h-6 w-6 text-primary" />
-                  </Button>
+                    <div className="relative h-64 w-full">
+                      <Image
+                        width={500}
+                        height={500}
+                        src={currentTestimonial.image}
+                        alt={`Testimonial from ${currentTestimonial.author}`}
+                        className="object-cover w-full h-full rounded-lg"
+                      />
+                      <Button
+                        size="icon"
+                        className="absolute inset-0 m-auto bg-white/80 hover:bg-white/90"
+                      >
+                        <Play className="h-6 w-6 text-primary" />
+                      </Button>
+                    </div>
+                  </motion.div>
                 </div>
               </CardContent>
             </motion.div>

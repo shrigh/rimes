@@ -53,14 +53,15 @@ const RimesFooter: React.FC = () => {
   });
   const isInView = useInView(footerRef, { once: true, amount: 0.2 });
   const ballControls = useAnimation();
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Define these constants at the component level
-
+  // Define these constants at the component level
   const ballRadius = 2; // Half of the ball's height (4px)
   const bounceTop = 0; // Top of the logo
-  const bounceBottom = -30; // Increased bounce height (adjust as needed)
+  const bounceBottom = -30; // Bounce height
   const xOffset = -40; // Leftward shift
-  const wordPositions = [260, 180, 100].map((x) => x + xOffset); // Adjust these x-positions for each word, from right to left
+  const wordPositions = [210, 150, 100].map((x) => x + xOffset); // Adjust these x-positions for each word, from right to left
 
   useEffect(() => {
     if (footerRef.current) {
@@ -74,39 +75,37 @@ const RimesFooter: React.FC = () => {
       ballControls
         .start({
           x: [
-            footerDimensions.width,
-            footerDimensions.height - ballRadius,
-
-            ...wordPositions.flatMap((x) => [x, x]),
-            wordPositions[wordPositions.length - 1],
+            // footerDimensions.width, // Start from the right side
+            // footerDimensions.width * 0.5, // Small bounce, move slightly left
+            ...wordPositions.flatMap((x) => [x + 20, x]), // Slight left movement when bouncing on words
+            wordPositions[wordPositions.length - 1], // Final word position
           ],
           y: [
-            bounceTop,
-            footerDimensions.height - ballRadius - 100,
-
+            // bounceTop, // Start from the top
+            // footerDimensions.height * 0.8, // Small bounce downward
             ...wordPositions.flatMap((i) => [
-              bounceBottom + i * 0.01,
-              bounceTop + i * 0.01,
+              bounceBottom + i * 0.1, // Smoother bounce on the words
+              bounceTop + i * 0.05, // Gradual upward after bounce
             ]),
-            0,
+            0, // Final resting position
           ],
           transition: {
-            duration: 3.1,
+            duration: 2, // Same duration to maintain the animation timing
             times: [
-              0,
-              0.5,
-              0.8,
+              0, // Starting point
+              0.4, // Second small bounce
+              0.8, // Large drop to bottom
               ...wordPositions.flatMap((_, i) => [
-                i / wordPositions.length,
+                (i + 0) / wordPositions.length,
                 (i + 0.5) / wordPositions.length,
               ]),
-              1,
+              1, // Final resting point
             ],
-            ease: "easeInOut",
+            ease: "easeInOut", // Smooth easing for natural motion
           },
         })
         .then(() => {
-          // ballControls.start({ opacity: 0, transition: { duration: 0 } });
+          setIsAnimating(true);
         });
     }
   }, [isInView, ballControls, footerDimensions]);
@@ -137,8 +136,9 @@ const RimesFooter: React.FC = () => {
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={containerVariants}
-      className="bg-white text-green-900 py-8 relative overflow-hidden"
+      className="bg-white text-green-900 pt-8 relative overflow-hidden"
     >
+      {/* motion for ball */}
       <motion.div
         className="absolute w-4 h-4 bg-[#F7942B] rounded-full z-10"
         initial={{ x: footerDimensions.width, y: bounceTop, opacity: 1 }}
@@ -238,7 +238,11 @@ const RimesFooter: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-orange-500 text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                className={`button-animie ${
+                  isAnimating
+                    ? "fill-start px-4 py-2 font-medium rounded-full"
+                    : ""
+                }`}
               >
                 Contact Us
               </motion.button>
